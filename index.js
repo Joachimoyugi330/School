@@ -2,8 +2,12 @@ const Joi = require('joi');
 const express = require('express');
 
 const app = express();
+
+app.set('view engine', 'pug');
+app.set('views', './views'); // change if views are not in views folder
+
 app.use(express.json());
-app.use(express.static('public'));
+app.use(express.static('public')); //use localhost/MyResume.pdf to view static pdf --> static files are served from the root of the project
 app.use(express.urlencoded({extended:true}))
 
 const courses =[
@@ -21,9 +25,15 @@ const students = [{
 {
 adm: 101,
 name: "Mary",
-email: "maryg@gmail.com"
+email: "maryg3@gmail.com"
 }
 ]
+
+// working with templates
+app.get('/', (req, res)=>{
+    res.render('index', {title:"School", message: "Hello"});
+});
+
 
 app.get('/api/students', (req, res)=>{
     res.send(students);
@@ -170,7 +180,7 @@ function validateCourse(course){
 }
 
 
-console.log(app.get('env'))
+
 const port = process.env.PORT || 3000;
 app.listen(port, ()=> console.log(`Listening on Port ${port}...`))
 
