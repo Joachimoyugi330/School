@@ -3,6 +3,8 @@ const express = require('express');
 
 const app = express();
 app.use(express.json());
+app.use(express.static('public'));
+app.use(express.urlencoded({extended:true}))
 
 const courses =[
     {id: 1, name: 'Math'},
@@ -167,6 +169,8 @@ function validateCourse(course){
     return Joi.validate(course, schema)
 }
 
+
+console.log(app.get('env'))
 const port = process.env.PORT || 3000;
 app.listen(port, ()=> console.log(`Listening on Port ${port}...`))
 
