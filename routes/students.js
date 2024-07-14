@@ -1,7 +1,22 @@
+const mongoose =require('mongoose');
 const express = require('express');
 const Joi = require('joi');
+const { required } = require('joi/lib/types/lazy');
 const router = express.Router();
 
+mongoose.connect('mongodb://127.0.0.1/School')
+.then(()=> console.log('Connected to MongoDB...'))
+.catch((err)=> console.log(err.message));
+
+const StudentsSchema = new mongoose.Schema({
+    name: {type: String, required: true},
+    adm: String,
+    email: String,
+    isGraduate: Boolean,
+    date : Date
+});
+
+const Student = mongoose.model('Student', StudentsSchema);
 
 const students = [{
     adm: 100,
@@ -16,7 +31,10 @@ email: "maryg3@gmail.com"
 ]
 
 router.get('/', (req, res)=>{
-    res.send(students);
+    Student.find()
+    .then((students)=>{
+        res.send(students);
+    })
 });
 
 router.get('/:adm', (req, res)=>{
